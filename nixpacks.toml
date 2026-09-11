@@ -1,5 +1,7 @@
-[providers.php]
-version = '8.3'
+providers = ["php"]
+
+[phases.setup]
+nixPkgs = ["php83", "composer", "nodejs"]
 
 [phases.install]
 cmds = ['composer install --no-dev --ignore-platform-reqs', 'npm i']
