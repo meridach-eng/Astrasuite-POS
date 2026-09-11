@@ -1,11 +1,10 @@
+providers = ["php"]
+
 [phases.setup]
-nixPkgs = ["php83", "php83Packages.composer", "nodejs"]
+nixPkgs = ["php83", "php83Packages.composer", "nodejs", "nginx"]
 
 [phases.install]
 cmds = ['composer install --no-dev --ignore-platform-reqs --no-scripts']
 
 [phases.build]
 cmds = []
-
-[phases.start]
-cmd = "php-fpm -D && nginx -g 'daemon off;'"
