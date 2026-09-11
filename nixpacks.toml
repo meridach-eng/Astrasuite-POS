@@ -1,0 +1,5 @@
+[phases.install]
+cmds = ['composer install --no-dev --ignore-platform-reqs', 'npm i']
+
+[phases.build]
+cmds = ['npm run build']
