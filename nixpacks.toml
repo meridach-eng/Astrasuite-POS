@@ -1,3 +1,6 @@
+[providers.php]
+version = '8.3'
+
 [phases.install]
 cmds = ['composer install --no-dev --ignore-platform-reqs', 'npm i']
 
