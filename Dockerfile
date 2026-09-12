@@ -28,7 +28,6 @@ RUN echo 'server { \
     } \
 }' > /etc/nginx/sites-available/default
 
-# Configurar Supervisor para mantener vivos PHP-FPM y Nginx
 RUN echo '[supervisord] \
 nodaemon=true \
 \
