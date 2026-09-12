@@ -28,24 +28,31 @@ RUN echo 'server { \
     } \
 }' > /etc/nginx/sites-available/default
 
+# Configurar Supervisor incluyendo el usuario root explícito para evitar avisos críticos
 RUN cat << 'EOF' > /etc/supervisor/conf.d/supervisord.conf
 [supervisord]
 nodaemon=true
+user=root
 
 [program:php-fpm]
 command=php-fpm
 autostart=true
 autorestart=true
+user=root
 
 [program:nginx]
 command=nginx -g "daemon off;"
 autostart=true
 autorestart=true
+user=root
 EOF
 
+# Asegurar permisos y directorios de PID para Nginx
 RUN mkdir -p /app/storage/framework/{sessions,views,cache/data} \
     && mkdir -p /app/storage/app/public \
     && mkdir -p /app/storage/logs \
+    && mkdir -p /var/run/nginx /var/log/nginx \
+    && chown -R www-data:www-data /var/log/nginx \
     && chmod -R 777 storage bootstrap/cache
 
 COPY entrypoint.sh /usr/bin/entrypoint.sh
