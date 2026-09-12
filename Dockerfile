@@ -11,24 +11,36 @@ COPY . .
 
 RUN composer install --no-dev --optimize-autoloader --no-interaction --ignore-platform-reqs
 
-# Configuración de Nginx para Laravel y límites de subida
 RUN echo "client_max_body_size 100M;" >> /etc/nginx/nginx.conf
 
-# Crear configuración básica de Nginx para el proyecto Laravel
 RUN echo 'server { \
     listen 80; \
     index index.php index.html; \
     root /app/public; \
     location / { \
-        try_files \$uri \$uri/ /index.php?\$query_string; \
+        try_files $uri $uri/ /index.php?$query_string; \
     } \
-    location ~ \.php\$ { \
+    location ~ \.php$ { \
         include fastcgi_params; \
         fastcgi_pass 127.0.0.1:9000; \
         fastcgi_index index.php; \
-        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name; \
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name; \
     } \
 }' > /etc/nginx/sites-available/default
+
+# Configurar Supervisor para mantener vivos PHP-FPM y Nginx
+RUN echo '[supervisord] \
+nodaemon=true \
+\
+[program:php-fpm] \
+command=php-fpm \
+autostart=true \
+autorestart=true \
+\
+[program:nginx] \
+command=nginx -g "daemon off;" \
+autostart=true \
+autorestart=true' > /etc/supervisor/conf.d/supervisord.conf
 
 RUN mkdir -p /app/storage/framework/{sessions,views,cache/data} \
     && mkdir -p /app/storage/app/public \
@@ -37,5 +49,4 @@ RUN mkdir -p /app/storage/framework/{sessions,views,cache/data} \
 
 EXPOSE 80
 
-# Script de arranque para PHP-FPM y Nginx en segundo plano
-CMD php artisan config:cache && php artisan route:cache && php artisan storage:link --force && service php8.4-fpm start && nginx -g "daemon off;"
+CMD php artisan config:cache && php artisan route:cache && php artisan storage:link --force && supervisord -c /etc/supervisor/conf.d/supervisord.conf
