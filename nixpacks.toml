@@ -1,14 +1,2 @@
-[phases.setup]
-apt_pkgs = ["php", "php-fpm", "php-mysql", "php-xml", "php-mbstring", "php-curl", "php-zip"]
-
-[phases.build]
-cmds = [
-  "composer install --no-dev --optimize-autoloader",
-  "npm install",
-  "npm run build",
-  "php artisan storage:link || true",
-  "chmod -R 775 storage bootstrap/cache"
-]
-
 [start]
-cmd = "php-fpm -D && nginx -g 'daemon off;'"
+cmd = "sh /app/start.sh"
