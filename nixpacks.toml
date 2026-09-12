@@ -4,5 +4,5 @@ nixPkgs = ["php83", "php83Packages.composer", "nodejs_20", "nginx"]
 [phases.install]
 cmds = [
     "composer install --ignore-platform-reqs",
-    "npm ci || npm install"
+    "npm install --include=optional"
 ]
