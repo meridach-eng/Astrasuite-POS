@@ -1,0 +1,33 @@
+providers = ["php", "node"]
+
+[phases.setup]
+nodejs = "20"
+npm = "10"
+
+php_extensions = [
+  "pdo_mysql",
+  "mbstring",
+  "openssl",
+  "curl",
+  "intl",
+  "zip",
+  "gd",
+  "bcmath",
+  "exif"
+]
+
+[phases.install]
+cmds = [
+  "composer install --no-dev --optimize-autoloader --ignore-platform-reqs",
+  "npm install"
+]
+
+[phases.build]
+cmds = [
+  "npm run build",
+  "php artisan storage:link || true",
+  "chmod -R 775 storage bootstrap/cache"
+]
+
+[start]
+cmd = "php-fpm -y /assets/php-fpm.conf & nginx -c /nginx.conf"
