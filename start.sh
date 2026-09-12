@@ -14,5 +14,7 @@ chmod -R 775 storage bootstrap/cache || true
 php artisan storage:link || true
 php artisan migrate --force || true
 
+echo "🚀 Iniciando PHP-FPM y Nginx..."
+
 php-fpm -D
 nginx -c /app/nginx.conf -g "daemon off;"
