@@ -21,34 +21,61 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        $appName = 'Astra POS';
-
-        try {
-            if (Schema::hasTable('configuracion_negocio')) {
-                $config = ConfiguracionNegocio::first();
-                if ($config && !empty($config->nombre_comercial)) {
-                    $appName = $config->nombre_comercial;
-                }
-            }
-        } catch (\Exception $e) {
-            // Ignora errores si las migraciones aún no corren
-        }
-
         return $panel
             ->default()
             ->id('admin')
             ->path('admin')
             ->login()
-            ->brandName($appName)
-            ->brandLogo(asset('images/logo.png'))
+            ->brandName(function (): string {
+                try {
+                    if (Schema::hasTable('configuracion_negocio')) {
+                        $config = ConfiguracionNegocio::first();
+                        if ($config && !empty($config->nombre_comercial)) {
+                            return $config->nombre_comercial;
+                        }
+                    }
+                } catch (\Throwable $e) {
+                    // Ignora excepciones durante migraciones
+                }
+
+                return 'Astra POS';
+            })
+            ->brandLogo(function (): string {
+                try {
+                    if (Schema::hasTable('configuracion_negocio')) {
+                        $config = ConfiguracionNegocio::first();
+                        if ($config && !empty($config->logo) && Storage::disk('public')->exists($config->logo)) {
+                            return Storage::disk('public')->url($config->logo);
+                        }
+                    }
+                } catch (\Throwable $e) {
+                    // Ignora excepciones si la base de datos no está disponible
+                }
+
+                return asset('images/logo.png');
+            })
             ->brandLogoHeight('10rem')
-            ->favicon(asset('images/logo.png'))
+            ->favicon(function (): string {
+                try {
+                    if (Schema::hasTable('configuracion_negocio')) {
+                        $config = ConfiguracionNegocio::first();
+                        if ($config && !empty($config->logo) && Storage::disk('public')->exists($config->logo)) {
+                            return Storage::disk('public')->url($config->logo);
+                        }
+                    }
+                } catch (\Throwable $e) {
+                    // Fallback
+                }
+
+                return asset('images/logo.png');
+            })
             ->colors([
                 'primary' => Color::Blue,
             ])
@@ -79,6 +106,7 @@ class AdminPanelProvider extends PanelProvider
                         .fi-sidebar-header img {
                             max-height: 5rem !important;
                             width: auto !important;
+                            object-fit: contain;
                         }
                     </style>
                 ')
