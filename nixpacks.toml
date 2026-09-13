@@ -14,4 +14,4 @@ cmds = [
 ]
 
 [start]
-cmd = "mkdir -p /var/log/nginx && php-fpm -y /assets/php-fpm.conf & nginx -c /assets/nginx.template.conf"
+cmd = "mkdir -p /var/log/nginx /var/cache/nginx && php-fpm -y /assets/php-fpm.conf & nginx -g 'daemon off;'"
