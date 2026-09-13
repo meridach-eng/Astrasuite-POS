@@ -48,7 +48,6 @@ class AdminPanelProvider extends PanelProvider
             ->brandName($appName)
             ->brandLogo(asset('images/logo.png'))
             ->brandLogoHeight('5rem')
-            ->viteTheme('resources/css/filament/admin/theme.css')
             ->favicon(asset('images/logo.png'))
             ->colors([
                 'primary' => Color::Blue,
@@ -65,6 +64,25 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Widgets\ReportesDetalleWidget::class,
                 \App\Filament\Widgets\CuentasPorCobrarStatsWidget::class,
             ])
+            ->renderHook(
+                PanelsRenderHook::HEAD_END,
+                fn (): string => Blade::render('
+                    <style>
+                        .fi-sidebar-header {
+                            height: auto !important;
+                            min-height: 6rem;
+                            padding: 1.5rem 1rem !important;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+                        .fi-sidebar-header img {
+                            max-height: 5rem !important;
+                            width: auto !important;
+                        }
+                    </style>
+                ')
+            )
             ->renderHook(
                 PanelsRenderHook::USER_MENU_BEFORE,
                 fn (): string => Blade::render('
