@@ -47,7 +47,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->brandName($appName)
             ->brandLogo(asset('images/logo.png'))
-            ->brandLogoHeight('8rem')
+            ->brandLogoHeight('5rem')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->favicon(asset('images/logo.png'))
             ->colors([
