@@ -46,9 +46,9 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->brandName($appName)
-            // Ruta directa al archivo físico en public/images/logo.png
             ->brandLogo(asset('images/logo.png'))
-            ->brandLogoHeight('5rem')
+            ->brandLogoHeight('8rem')
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->favicon(asset('images/logo.png'))
             ->colors([
                 'primary' => Color::Blue,

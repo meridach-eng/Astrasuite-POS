@@ -1,0 +1,13 @@
+.fi-sidebar-header {
+    height: auto !important;
+    min-height: 6rem;
+    padding: 1.5rem 1rem !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fi-sidebar-header img {
+    max-height: 5rem !important;
+    width: auto !important;
+}
