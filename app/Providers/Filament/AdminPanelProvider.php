@@ -47,7 +47,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->brandName($appName)
             ->brandLogo(asset('images/logo.png'))
-            ->brandLogoHeight('5rem')
+            ->brandLogoHeight('10rem')
             ->favicon(asset('images/logo.png'))
             ->colors([
                 'primary' => Color::Blue,
