@@ -8,9 +8,10 @@ cmds = [
 
 [phases.build]
 cmds = [
+    "mkdir -p /var/log/nginx /var/cache/nginx",
     "php artisan storage:link || true",
     "chmod -R 775 storage bootstrap/cache"
 ]
 
 [start]
-cmd = "php-fpm -y /assets/php-fpm.conf & nginx -c /nginx.conf"
+cmd = "mkdir -p /var/log/nginx && php-fpm -y /assets/php-fpm.conf & nginx -c /assets/nginx.template.conf"
