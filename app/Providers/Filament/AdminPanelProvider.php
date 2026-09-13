@@ -48,7 +48,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName($appName)
             // Ruta directa al archivo físico en public/images/logo.png
             ->brandLogo(asset('images/logo.png'))
-            ->brandLogoHeight('10rem')
+            ->brandLogoHeight('5rem')
             ->favicon(asset('images/logo.png'))
             ->colors([
                 'primary' => Color::Blue,
